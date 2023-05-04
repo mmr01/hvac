@@ -1,0 +1,161 @@
+T <- function(x) { if (is.na(x)) { return (NA) } else { if (x > 15) { return (0) } else { return (15  - x)}}}
+
+frac <- function(x,y) { if (is.na(x) || is.na(y)) { return (NA) } else { return (x/y)}}
+
+
+# sed -e "s/°C//g" TEMP-2021-12.csv > TMP-2021-12.csv
+
+dfQy2021m10 = read.csv("CH-2021-10.csv", skip = 1, header = F)
+dfQy2021m11 = read.csv("CH-2021-11.csv", skip = 1, header = F)
+dfQy2021m12 = read.csv("CH-2021-12.csv", skip = 1, header = F)
+dfQy2022m01 = read.csv("CH-2022-01.csv", skip = 1, header = F)
+dfQy2022m02 = read.csv("CH-2022-02.csv", skip = 1, header = F)
+dfQy2022m03 = read.csv("CH-2022-03.csv", skip = 1, header = F)
+dfQy2022m04 = read.csv("CH-2022-04.csv", skip = 1, header = F)
+dfQy2022m05 = read.csv("CH-2022-05.csv", skip = 1, header = F)
+
+dfTy2021m10 = read.csv("TMP-2021-10.csv", skip = 1, header = F)
+dfTy2021m11 = read.csv("TMP-2021-11.csv", skip = 1, header = F)
+dfTy2021m12 = read.csv("TMP-2021-12.csv", skip = 1, header = F)
+dfTy2022m01 = read.csv("TMP-2022-01.csv", skip = 1, header = F)
+dfTy2022m02 = read.csv("TMP-2022-02.csv", skip = 1, header = F)
+dfTy2022m03 = read.csv("TMP-2022-03.csv", skip = 1, header = F)
+dfTy2022m04 = read.csv("TMP-2022-04.csv", skip = 1, header = F)
+dfTy2022m05 = read.csv("TMP-2022-05.csv", skip = 1, header = F)
+
+sapply(dfTy2021m10$V2, T)
+sapply(dfQy2021m10$V2, T)
+
+# Test temperature and hour-degrees
+plot(dfTy2021m10$V2, type = "l", col = "blue", ylim=c(0, max(dfTy2021m10$V2, na.rm=T)))
+lines(sapply(dfTy2021m10$V2, T),  type = "l", col = "red")
+
+# Append heat power consumption
+lines(sapply(dfQy2021m10$V2, T),  type = "l", col = "gray")
+
+
+# Remove NA indices from a pair of temperature / heat vectors 
+
+cmp(dfQy2021m10$V2, dfTy2021m10$V2)
+
+xN = dfQy2021m10$V2
+yN = dfTy2021m10$V2
+
+xN = dfQy2021m11$V2
+yN = dfTy2021m11$V2
+
+xN = dfQy2021m12$V2
+yN = dfTy2021m12$V2
+
+
+xN = dfTy2022m01$V2
+yN = dfCy2022m01$V2
+
+x <- xN[-which(is.na(xN))]
+y <- yN[-which(is.na(xN))]
+
+xN <- x
+yN <- y
+
+x <- xN[-which(is.na(yN))]
+y <- yN[-which(is.na(yN))]
+
+which(is.na(x))
+which(is.na(y))
+
+length(x)
+length(y)
+
+sum(x)
+sum(sapply(y,T))
+
+
+
+#
+#
+#
+
+
+# Compare function definitions
+
+cmp <- function(tm, xN,yN)
+{
+
+if (length(which(is.na(xN))) > 0)
+{
+    x <- xN[-which(is.na(xN))]
+    y <- yN[-which(is.na(xN))]
+
+}
+
+else
+{
+    x <- xN
+    y <- yN
+}
+
+if (length(which(is.na(yN))) > 0)
+{
+
+    xN <- x
+    yN <- y
+
+    x <- xN[-which(is.na(yN))]
+    y <- yN[-which(is.na(yN))]
+}
+else
+{
+    x <- xN
+    y <- yN
+}
+
+#which(is.na(x))
+#which(is.na(y))
+
+#print(length(x))
+#print(length(y))
+
+#print(sum(x))
+#print(sum(sapply(y,T)))
+
+cat(tm, " & ", length(x), " & ", sum(x),  " & ", sum(sapply(y,T)), " & ", sum(x) / sum(sapply(y,T)), "\\\\ \n")
+
+}
+
+
+cmp("Oct, 2021", dfQy2021m10$V2, dfTy2021m10$V2)
+cmp("Nov, 2021", dfQy2021m11$V2, dfTy2021m11$V2)
+cmp("Dec, 2021", dfQy2021m12$V2, dfTy2021m12$V2)
+cmp("Jan, 2022", dfQy2022m01$V2, dfTy2022m01$V2)
+cmp("Feb, 2022", dfQy2022m02$V2, dfTy2022m02$V2)
+cmp("Mar, 2022", dfQy2022m03$V2, dfTy2022m03$V2)
+cmp("Apr, 2022", dfQy2022m04$V2, dfTy2022m04$V2)
+cmp("May, 2022", dfQy2022m05$V2, dfTy2022m05$V2)
+
+
+cmp("Oct-Dec, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2, dfQy2021m12$V2), c(dfTy2021m10$V2, dfTy2021m11$V2, dfTy2021m12$V2))
+cmp("Jan-Mar, 2022", c(dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2))
+
+cmp("Mar-May, 2022", c(dfQy2022m03$V2, dfQy2022m04$V2, dfQy2022m05$V2), c(dfTy2022m03$V2, dfTy2022m04$V2, dfTy2022m05$V2))
+
+dfy2021m03m05 = read.csv("Before-Update-2021-03-2021-05.csv", skip = 1, header = F)
+cmp("Mar-May, 2021", dfy2021m03m05$V3, dfy2021m03m05$V4)
+
+dfy2021m03m05 = read.csv("Before-Update-2021-03-2021-05-Hours.csv", skip = 1, header = F)
+cmp("Mar-May, 2021", dfy2021m03m05$V2, dfy2021m03m05$V3)
+
+
+
+cmp("Oct-Nov, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2), c(dfTy2021m10$V2, dfTy2021m11$V2))
+cmp("Dec-Mar, 2022", c(dfQy2021m12$V2, dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2021m12$V2, dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2))
+
+
+dfy2021m04 = read.csv("Before-Update-2021-04-Hours.csv", skip = 1, header = F)
+cmp("Apr, 2021", dfy2021m04$V2, dfy2021m04$V3)
+
+
+dfy2021m05 = read.csv("Before-Update-2021-05-Hours.csv", skip = 1, header = F)
+cmp("May, 2021", dfy2021m05$V2, dfy2021m05$V3)
+
+cmp("Apr-May, 2021", c(dfy2021m04$V2,dfy2021m05$V2), c(dfy2021m04$V3,dfy2021m05$V3))
+
