@@ -1,6 +1,6 @@
 # Central heating data
 
-Please cite as:
+Please [the article](https://www.mdpi.com/1996-1073/16/14/5584)  cite as:
 
 **APA**
 
