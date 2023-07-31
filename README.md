@@ -10,8 +10,6 @@ Markiewicz, M., Skała, A., Grela, J., Janusz, S., Stasiak, T., Latoń, D., Biel
 
 **BibTeX**
 
-{% raw %}
-
 ```
 @Article{hvac-markiewicz-2023,
     AUTHOR = {Markiewicz, Micha\l{} and Ska\l{}a, Aleksander and Grela, Jakub and Janusz, Szymon and Stasiak, Tadeusz and Lato\'n, Dominik and Bielecki, Andrzej and Ba\'nczyk, Katarzyna},
