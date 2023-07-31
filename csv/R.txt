@@ -1,4 +1,8 @@
-T <- function(x) { if (is.na(x)) { return (NA) } else { if (x > 15) { return (0) } else { return (15  - x)}}}
+T <- function(x) { if (is.na(x)) { return (NA) } else { if (x > 18) { return (0) } else { return (18  - x)}}}
+
+# Thermal discomfort
+D <- function(x) { if (is.na(x)) { return (NA) } else { if (x > 21) { return (0) } else { return (21  - x)*(21 - x)}}}
+O <- function(x) { if (is.na(x)) { return (NA) } else { if (x > 21) { return (x - 21) } else { return (0)}}}
 
 frac <- function(x,y) { if (is.na(x) || is.na(y)) { return (NA) } else { return (x/y)}}
 
@@ -23,6 +27,7 @@ dfTy2022m03 = read.csv("TMP-2022-03.csv", skip = 1, header = F)
 dfTy2022m04 = read.csv("TMP-2022-04.csv", skip = 1, header = F)
 dfTy2022m05 = read.csv("TMP-2022-05.csv", skip = 1, header = F)
 
+
 sapply(dfTy2021m10$V2, T)
 sapply(dfQy2021m10$V2, T)
 
@@ -36,7 +41,7 @@ lines(sapply(dfQy2021m10$V2, T),  type = "l", col = "gray")
 
 # Remove NA indices from a pair of temperature / heat vectors 
 
-cmp(dfQy2021m10$V2, dfTy2021m10$V2)
+#cmp(dfQy2021m10$V2, dfTy2021m10$V2)
 
 xN = dfQy2021m10$V2
 yN = dfTy2021m10$V2
@@ -78,7 +83,7 @@ sum(sapply(y,T))
 
 # Compare function definitions
 
-cmp <- function(tm, xN,yN)
+cmp <- function(tm, xN,yN, f)
 {
 
 if (length(which(is.na(xN))) > 0)
@@ -118,44 +123,225 @@ else
 #print(sum(x))
 #print(sum(sapply(y,T)))
 
-cat(tm, " & ", length(x), " & ", sum(x),  " & ", sum(sapply(y,T)), " & ", sum(x) / sum(sapply(y,T)), "\\\\ \n")
+cat(tm, " & ", length(x), " & ", sum(x),  " & ", sum(sapply(y,f)), " & ", sum(x) / sum(sapply(y,f)), "\\\\ \n")
 
 }
 
 
-cmp("Oct, 2021", dfQy2021m10$V2, dfTy2021m10$V2)
-cmp("Nov, 2021", dfQy2021m11$V2, dfTy2021m11$V2)
-cmp("Dec, 2021", dfQy2021m12$V2, dfTy2021m12$V2)
-cmp("Jan, 2022", dfQy2022m01$V2, dfTy2022m01$V2)
-cmp("Feb, 2022", dfQy2022m02$V2, dfTy2022m02$V2)
-cmp("Mar, 2022", dfQy2022m03$V2, dfTy2022m03$V2)
-cmp("Apr, 2022", dfQy2022m04$V2, dfTy2022m04$V2)
-cmp("May, 2022", dfQy2022m05$V2, dfTy2022m05$V2)
+f = T
+cmp("Oct, 2021", dfQy2021m10$V2, dfTy2021m10$V2,f)
+cmp("Nov, 2021", dfQy2021m11$V2, dfTy2021m11$V2,f)
+cmp("Dec, 2021", dfQy2021m12$V2, dfTy2021m12$V2,f)
+cmp("Jan, 2022", dfQy2022m01$V2, dfTy2022m01$V2,f)
+cmp("Feb, 2022", dfQy2022m02$V2, dfTy2022m02$V2,f)
+cmp("Mar, 2022", dfQy2022m03$V2, dfTy2022m03$V2,f)
+cmp("Apr, 2022", dfQy2022m04$V2, dfTy2022m04$V2,f)
+cmp("May, 2022", dfQy2022m05$V2, dfTy2022m05$V2,f)
 
 
-cmp("Oct-Dec, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2, dfQy2021m12$V2), c(dfTy2021m10$V2, dfTy2021m11$V2, dfTy2021m12$V2))
-cmp("Jan-Mar, 2022", c(dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2))
+cmp("Oct-Dec, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2, dfQy2021m12$V2), c(dfTy2021m10$V2, dfTy2021m11$V2, dfTy2021m12$V2),f)
+cmp("Jan-Mar, 2022", c(dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2),f)
 
-cmp("Mar-May, 2022", c(dfQy2022m03$V2, dfQy2022m04$V2, dfQy2022m05$V2), c(dfTy2022m03$V2, dfTy2022m04$V2, dfTy2022m05$V2))
+cmp("Mar-May, 2022", c(dfQy2022m03$V2, dfQy2022m04$V2, dfQy2022m05$V2), c(dfTy2022m03$V2, dfTy2022m04$V2, dfTy2022m05$V2),f)
 
 dfy2021m03m05 = read.csv("Before-Update-2021-03-2021-05.csv", skip = 1, header = F)
-cmp("Mar-May, 2021", dfy2021m03m05$V3, dfy2021m03m05$V4)
+cmp("Mar-May, 2021", dfy2021m03m05$V3, dfy2021m03m05$V4,f)
 
 dfy2021m03m05 = read.csv("Before-Update-2021-03-2021-05-Hours.csv", skip = 1, header = F)
-cmp("Mar-May, 2021", dfy2021m03m05$V2, dfy2021m03m05$V3)
+cmp("Mar-May, 2021", dfy2021m03m05$V2, dfy2021m03m05$V3,f)
 
 
 
-cmp("Oct-Nov, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2), c(dfTy2021m10$V2, dfTy2021m11$V2))
-cmp("Dec-Mar, 2022", c(dfQy2021m12$V2, dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2021m12$V2, dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2))
+cmp("Oct-Nov, 2021", c(dfQy2021m10$V2, dfQy2021m11$V2), c(dfTy2021m10$V2, dfTy2021m11$V2),f)
+cmp("Dec-Mar, 2022", c(dfQy2021m12$V2, dfQy2022m01$V2, dfQy2022m02$V2, dfQy2022m03$V2), c(dfTy2021m12$V2, dfTy2022m01$V2, dfTy2022m02$V2, dfTy2022m03$V2),f)
 
 
 dfy2021m04 = read.csv("Before-Update-2021-04-Hours.csv", skip = 1, header = F)
-cmp("Apr, 2021", dfy2021m04$V2, dfy2021m04$V3)
+cmp("Apr, 2021", dfy2021m04$V2, dfy2021m04$V3,f)
 
 
 dfy2021m05 = read.csv("Before-Update-2021-05-Hours.csv", skip = 1, header = F)
-cmp("May, 2021", dfy2021m05$V2, dfy2021m05$V3)
+cmp("May, 2021", dfy2021m05$V2, dfy2021m05$V3,f)
 
-cmp("Apr-May, 2021", c(dfy2021m04$V2,dfy2021m05$V2), c(dfy2021m04$V3,dfy2021m05$V3))
+cmp("Apr-May, 2021", c(dfy2021m04$V2,dfy2021m05$V2), c(dfy2021m04$V3,dfy2021m05$V3),f)
 
+
+
+
+
+
+
+
+
+
+# Inside temperatures
+inside = read.fwf("export-2021-12.txt", width = c(11, 17, 23))
+unique(inside$V1)
+
+
+library(viridis)
+vcols = viridis(5)
+
+plot(inside$V2[which(inside$V1==7)], type="l", xlab="Readout number", ylab=expression(paste('Temperature [',degree,'C]',sep='')),ylim=c(min(inside$V2),max(inside$V2)), col=vcols[1])
+lines(inside$V2[which(inside$V1==9)], col=vcols[2])
+lines(inside$V2[which(inside$V1==10)], col=vcols[3])
+lines(inside$V2[which(inside$V1==11)], col=vcols[4])
+legend("bottomright", legend=c("Sensor #7", "Sensor #9", "Sensor #10", "Sensor #11"), col=vcols[1:4], pch=16)
+
+# Not adjusted by date!
+
+library(viridis)
+png("temperature-inside-in-2021-12.png", width=800, height=600)
+vcols = viridis(5)
+plot(inside$V2[which(inside$V1==7)], type="l", xlab="Readout number", ylab=expression(paste('Temperature [',degree,'C]',sep='')),ylim=c(min(inside$V2),max(inside$V2)), col=vcols[1])
+lines(inside$V2[which(inside$V1==9)], col=vcols[2])
+lines(inside$V2[which(inside$V1==10)], col=vcols[3])
+lines(inside$V2[which(inside$V1==11)], col=vcols[4])
+legend("bottomright", legend=c("Sensor #7", "Sensor #9", "Sensor #10", "Sensor #11"), col=vcols[1:4], pch=16)
+dev.off()
+
+
+grep -e "^          7" export-2021-12.txt  > no7-export-2021-12.txt
+
+
+inside = read.csv("Inside-Temperatures-Hourly.csv", skip = 1, header = F)	
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)	
+
+axis(1, at=1:length(inside$V1), labels=inside$V1)
+
+tt = '2022-01'
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+
+plot(inside$V8)
+#[inside$V2 %in% tts], xaxt='n', ann=FALSE)
+
+library(viridis)
+
+
+
+
+
+
+f = D
+tt = '2022-01'
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+# rep(1, n)
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)
+library(viridis)
+
+
+#
+# Adjusted by date
+
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)	
+
+tt = '2022-01'
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+
+plot(inside$V8)
+
+library(viridis)
+
+#
+# Bigger set - working
+#
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)	
+
+inside = subset(inside, inside$V3 %in% tts)
+
+s <- seq(1:length(inside$V3))
+x <- cbind(s,s,s,s,s,s)
+y <- cbind(inside$V4,inside$V5,inside$V6,inside$V7,inside$V8,inside$V9,inside$V10,inside$V11)
+lg = c(10, 9, 4, 8, 11, 7, 6, 5)
+matplot(x,y, col=viridis(length(lg)), type='l', pch=1, xaxt='n', ann=FALSE)
+legend("topright", legend = lg, col=viridis(length(lg)), pch=19)
+axis(1, at=1:length(inside$V1), labels=substring(inside$V1,1,10))
+
+#
+# Smaller set - working
+#
+png("temperature-inside-sensor-10.png", width=800, height=600)
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)	
+
+inside = subset(inside, inside$V3 %in% tts)
+s <- seq(1:length(inside$V3))
+x <- cbind(s)
+y <- cbind(inside$V4)
+lg = c(10)
+matplot(x,y, col=viridis(length(lg)), type='l', pch=19, xaxt='n', ann=FALSE)
+legend("topright", legend = lg, col=viridis(length(lg)), pch=19)
+axis(1, at=1:length(inside$V1), labels=substring(inside$V1,1,10))
+dev.off()
+
+# Use inside$V3 -- date inside$V4 - temperature#10
+
+
+daysInWhichOudoorTempWasGreaterThan21 = c('2021-05-01','2021-05-04','2021-05-09','2021-05-10',
+'2021-05-11','2021-05-12','2021-05-13','2021-05-14','2021-05-16','2021-05-17','2021-05-20','2021-05-21', '2021-04-14','2021-04-19','2021-04-20','2021-04-21','2021-04-29','2021-04-30')
+tts = c('2021-04', '2021-05', '2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05')
+tms = c('Apr, 2021', 'May, 2021', 'Oct, 2021', 'Nov, 2021', 'Dec, 2021', 'Jan, 2022', 'Feb, 2022', 'Mar, 2022', 'Apr, 2022', 'May, 2022' )
+inside = read.csv("Inside-Temperatures-Hourly-Full.csv", skip = 1, header = F)	
+
+for (x in 1:length(tts)) {
+    tt = tts[x]
+    tm = tms[x]
+    h = subset(inside, (inside$V3 == tt) & !(inside$V2 %in% daysInWhichOudoorTempWasGreaterThan21))$V4
+    if (any(is.na(h))) {
+        h = h[-which(is.na(h))]
+    }
+    cat(tm, " & ", length(h), " & ", length(h[h < 21]), " & ", round(sum(sapply(h,D))/length(h),2), " & ", length(h[h > 21]), " & ",  round(sum(sapply(h,O))/length(h),2), " & I \\\\ \n")
+} 
+
+tt = c('2021-04', '2021-05')
+tm = 'Apr-May, 2021'
+
+    h = subset(inside, (inside$V3 == tt) & !(inside$V2 %in% daysInWhichOudoorTempWasGreaterThan21))$V4
+if (any(is.na(h))) {
+    h = h[-which(is.na(h))]
+}
+cat(tm, " & ", length(h), " & ", length(h[h < 21]), " & ", round(sum(sapply(h,D))/length(h),2), " & ", length(h[h > 21]), " & ",  round(sum(sapply(h,O))/length(h),2), " & I \\\\ \n")
+
+
+
+tt = c('2021-10', '2021-11')
+tm = 'Oct-Nov, 2021'
+
+    h = subset(inside, (inside$V3 == tt) & !(inside$V2 %in% daysInWhichOudoorTempWasGreaterThan21))$V4
+
+if (any(is.na(h))) {
+    h = h[-which(is.na(h))]
+}
+cat(tm, " & ", length(h), " & ", length(h[h < 21]), " & ", round(sum(sapply(h,D))/length(h),2), " & ", length(h[h > 21]), " & ",  round(sum(sapply(h,O))/length(h),2), " & I \\\\ \n")
+
+
+
+tt = c('2021-12', '2022-01', '2022-02', '2022-03')
+tm = 'Dec-Mar, 2022'
+
+    h = subset(inside, (inside$V3 == tt) & !(inside$V2 %in% daysInWhichOudoorTempWasGreaterThan21))$V4
+if (any(is.na(h))) {
+    h = h[-which(is.na(h))]
+}
+cat(tm, " & ", length(h), " & ", length(h[h < 21]), " & ", round(sum(sapply(h,D))/length(h),2), " & ", length(h[h > 21]), " & ",  round(sum(sapply(h,O))/length(h),2), " & I \\\\ \n")
+
+
+
+
+h = dfTy2021m10 = read.csv("TMP-2021-10.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2021m11 = read.csv("TMP-2021-11.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2021m12 = read.csv("TMP-2021-12.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2022m01 = read.csv("TMP-2022-01.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2022m02 = read.csv("TMP-2022-02.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2022m03 = read.csv("TMP-2022-03.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2022m04 = read.csv("TMP-2022-04.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
+h = dfTy2022m05 = read.csv("TMP-2022-05.csv", skip = 1, header = F)
+sum(!is.na(h$V2[h$V2>21]))
